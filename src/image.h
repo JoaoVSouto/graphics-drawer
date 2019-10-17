@@ -12,4 +12,6 @@ enum primitives {
   SAVE
 };
 
+void createImage(int width, int height);
+
 #endif
