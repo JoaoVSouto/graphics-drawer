@@ -1,7 +1,7 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-enum primitives {
+typedef enum {
   IMAGE,
   COLOR,
   CLEAR,
@@ -10,7 +10,7 @@ enum primitives {
   POLYGON,
   FILL,
   SAVE
-};
+} primitives;
 
 void createImage(int width, int height);
 

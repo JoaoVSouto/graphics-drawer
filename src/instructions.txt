@@ -1,4 +1,5 @@
 image 600 400
+image 700 300
 clear 0 0 0
 color 100 170 200
 line 0 400 600 200
