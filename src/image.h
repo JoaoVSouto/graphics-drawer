@@ -1,7 +1,7 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-typedef enum {
+typedef enum primitives {
   IMAGE,
   COLOR,
   CLEAR,
@@ -12,8 +12,9 @@ typedef enum {
   SAVE
 } primitives;
 
-typedef struct {
-  char* imageFile;
+typedef struct Image {
+  char* image;
+  char*** matrix;
   int columns;
   int rows;
   int currentColor[3];
@@ -21,5 +22,6 @@ typedef struct {
 } Image;
 
 void createImage(Image* image, int width, int height);
+void clearImage(Image* image, int red, int green, int blue);
 
 #endif

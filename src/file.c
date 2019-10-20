@@ -38,6 +38,7 @@ bool saveImage(Image* image, char* bruteImageName) {
   char* imageName;
   FILE* file;
   bool saveSuccess = false;
+  int i, j;
 
   imageName = (char*)calloc(strlen(bruteImageName), sizeof(char));
 
@@ -48,12 +49,14 @@ bool saveImage(Image* image, char* bruteImageName) {
     imageName[strlen(imageName) - 2] = '\0';
   }
 
+  // TODO: arrumar alguma forma de anotar a matriz cada item por linha
+
   file = fopen(imageName, "w");
 
   if (file == NULL) {
     printf("Erro na abertura do arquivo %s para escrita\n", imageName);
   } else {
-    if (fputs(image->imageFile, file) != EOF) {
+    if (fputs(image->image, file) != EOF) {
       printf("Arquivo salvo com sucesso!\n");
       saveSuccess = true;
     }

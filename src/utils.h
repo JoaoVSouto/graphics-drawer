@@ -1,10 +1,10 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-typedef enum { false,
-               true } bool;
+typedef enum bool { false,
+                    true } bool;
 
-typedef struct {
+typedef struct Arguments {
   int* buffer;
   int counter;
   bool mode;

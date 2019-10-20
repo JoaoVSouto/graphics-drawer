@@ -10,7 +10,7 @@ int main() {
   char* token;
   const char blankSpace[2] = " ";
 
-  unsigned int i;
+  int i, j;
   primitives primitive;
 
   Arguments arguments;
@@ -36,6 +36,11 @@ int main() {
           createImage(&image, arguments.buffer[0], arguments.buffer[1]);
         } else if (primitive == SAVE) {
           saveImage(&image, token);
+        } else if (primitive == CLEAR) {
+          clearImage(&image,
+                     arguments.buffer[0],
+                     arguments.buffer[1],
+                     arguments.buffer[2]);
         }
 
         arguments.mode = false;
@@ -52,11 +57,23 @@ int main() {
       primitive = SAVE;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(1, sizeof(int));
+    } else if (strstr(token, "clear") != NULL) {
+      primitive = CLEAR;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(3, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);
   }
 
+  for (i = 0; i < image.rows; i++) {
+    for (j = 0; j < image.columns; j++) {
+      free(image.matrix[i][j]);
+    }
+    free(image.matrix[i]);
+  }
+  free(image.matrix);
+  free(image.image);
   free(arguments.buffer);
 
   return 0;
