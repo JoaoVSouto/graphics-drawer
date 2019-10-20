@@ -35,7 +35,7 @@ int main() {
       }
     }
 
-    if (!strcmp(token, "image")) {
+    if (strstr(token, "image") != NULL) {
       primitive = IMAGE;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(2, sizeof(int));
