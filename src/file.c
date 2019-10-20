@@ -1,6 +1,7 @@
 #include "file.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 char* readInstructions() {
   FILE* file;
@@ -25,9 +26,40 @@ char* readInstructions() {
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
     fileContent[fileSize] = '\0';
+    printf("Leitura arquivo realizada com sucesso!\n");
 
     fclose(file);
   }
 
   return fileContent;
+}
+
+bool saveImage(Image* image, char* bruteImageName) {
+  char* imageName;
+  FILE* file;
+  bool saveSuccess = false;
+
+  imageName = (char*)calloc(strlen(bruteImageName), sizeof(char));
+
+  strcpy(imageName, bruteImageName);
+  imageName[strlen(imageName) - 1] = '\0';
+  // Caso a string tenha quatro caracteres antes do ponto, adicionar mais 1 \0
+  if (strlen(imageName) == 10) {
+    imageName[strlen(imageName) - 2] = '\0';
+  }
+
+  file = fopen(imageName, "w");
+
+  if (file == NULL) {
+    printf("Erro na abertura do arquivo %s para escrita\n", imageName);
+  } else {
+    if (fputs(image->imageFile, file) != EOF) {
+      printf("Arquivo salvo com sucesso!\n");
+      saveSuccess = true;
+    }
+
+    fclose(file);
+  }
+
+  return saveSuccess;
 }

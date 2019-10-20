@@ -12,6 +12,14 @@ typedef enum {
   SAVE
 } primitives;
 
-void createImage(int width, int height);
+typedef struct {
+  char* imageFile;
+  int columns;
+  int rows;
+  int currentColor[3];
+  int charactersWritten;
+} Image;
+
+void createImage(Image* image, int width, int height);
 
 #endif
