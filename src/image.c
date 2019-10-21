@@ -42,3 +42,16 @@ void setCurrentColor(Image* image, int red, int green, int blue) {
   image->currentColor[1] = green;
   image->currentColor[2] = blue;
 }
+
+void drawLine(Image* image, int x1, int y1, int x2, int y2) {
+  double coeficient = (y2 - y1) / (x2 - x1);
+  int diffX = x2 - x1;
+  int diffY = y2 - y1;
+  // TODO: criar condições para linhas com diffX == 0 e diffY == 0
+
+  if (diffX >= diffY && coeficient < 0) {         // Octante 08
+  } else if (diffX >= diffY && coeficient > 0) {  // Octante 01
+  } else if (diffX <= diffY && coeficient < 0) {  // Octante 07
+  } else if (diffX <= diffY && coeficient > 0) {  // Octante 02
+  }
+}

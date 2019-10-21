@@ -5,6 +5,7 @@ typedef enum primitives {
   IMAGE,
   COLOR,
   CLEAR,
+  LINE,
   RECT,
   CIRCLE,
   POLYGON,
@@ -23,5 +24,6 @@ typedef struct Image {
 void createImage(Image* image, int width, int height);
 void clearImage(Image* image, int red, int green, int blue);
 void setCurrentColor(Image* image, int red, int green, int blue);
+void drawLine(Image* image, int x1, int y1, int x2, int y2);
 
 #endif
