@@ -24,8 +24,7 @@ void createImage(Image* image, int width, int height) {
 
   image->image = (char*)calloc(imageSize, sizeof(char));
 
-  image->charactersWritten = sprintf(image->image,
-                                     "P3\n%d %d\n255\n", width, height);
+  sprintf(image->image, "P3\n%d %d\n255\n", width, height);
 }
 
 void clearImage(Image* image, int red, int green, int blue) {
@@ -36,4 +35,10 @@ void clearImage(Image* image, int red, int green, int blue) {
       sprintf(image->matrix[i][j], "%d %d %d\n", red, green, blue);
     }
   }
+}
+
+void setCurrentColor(Image* image, int red, int green, int blue) {
+  image->currentColor[0] = red;
+  image->currentColor[1] = green;
+  image->currentColor[2] = blue;
 }

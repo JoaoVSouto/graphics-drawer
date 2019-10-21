@@ -41,6 +41,11 @@ int main() {
                      arguments.buffer[0],
                      arguments.buffer[1],
                      arguments.buffer[2]);
+        } else if (primitive == COLOR) {
+          setCurrentColor(&image,
+                          arguments.buffer[0],
+                          arguments.buffer[1],
+                          arguments.buffer[2]);
         }
 
         arguments.mode = false;
@@ -59,6 +64,10 @@ int main() {
       arguments.buffer = (int*)calloc(1, sizeof(int));
     } else if (strstr(token, "clear") != NULL) {
       primitive = CLEAR;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(3, sizeof(int));
+    } else if (strstr(token, "color") != NULL) {
+      primitive = COLOR;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(3, sizeof(int));
     }

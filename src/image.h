@@ -18,10 +18,10 @@ typedef struct Image {
   int columns;
   int rows;
   int currentColor[3];
-  int charactersWritten;
 } Image;
 
 void createImage(Image* image, int width, int height);
 void clearImage(Image* image, int red, int green, int blue);
+void setCurrentColor(Image* image, int red, int green, int blue);
 
 #endif
