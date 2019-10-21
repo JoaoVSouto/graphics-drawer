@@ -49,7 +49,12 @@ bool saveImage(Image* image, char* bruteImageName) {
     imageName[strlen(imageName) - 2] = '\0';
   }
 
-  // TODO: arrumar alguma forma de anotar a matriz cada item por linha
+  // Escreve a matriz na imagem
+  for (i = 0; i < image->rows; i++) {
+    for (j = 0; j < image->columns; j++) {
+      strcat(image->image, image->matrix[i][j]);
+    }
+  }
 
   file = fopen(imageName, "w");
 
@@ -63,6 +68,8 @@ bool saveImage(Image* image, char* bruteImageName) {
 
     fclose(file);
   }
+
+  free(imageName);
 
   return saveSuccess;
 }

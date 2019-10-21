@@ -10,7 +10,7 @@ void createImage(Image* image, int width, int height) {
   int imageSize = width * height * MAX_CHARS_PER_LINE + HEADER_SIZE;
   int i, j;
 
-  // Alocando a matriz tridimensional
+  // Alocando a matriz
   image->matrix = (char***)calloc(height, sizeof(char**));
   for (i = 0; i < height; i++) {
     image->matrix[i] = (char**)calloc(width, sizeof(char*));
@@ -33,7 +33,7 @@ void clearImage(Image* image, int red, int green, int blue) {
 
   for (i = 0; i < image->rows; i++) {
     for (j = 0; j < image->columns; j++) {
-      sprintf(image->matrix[i][j], "%d %d %d", red, green, blue);
+      sprintf(image->matrix[i][j], "%d %d %d\n", red, green, blue);
     }
   }
 }

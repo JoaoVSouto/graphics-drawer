@@ -5,6 +5,6 @@
 #include "utils.h"
 
 char* readInstructions();
-bool saveImage(Image* image, char* imageName);
+bool saveImage(Image* image, char* bruteImageName);
 
 #endif
