@@ -1,6 +1,4 @@
 #include "image.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 #define MAX_CHARS_PER_LINE 12
 #define HEADER_SIZE 20
@@ -43,15 +41,62 @@ void setCurrentColor(Image* image, int red, int green, int blue) {
   image->currentColor[2] = blue;
 }
 
+/*
+  Suponha uma figura 600x400
+  (0, 0)  |------------------------------| (600, 0)
+          |                              |
+          |                              |
+          |                              |
+          |                              |
+  (0,400) |------------------------------| (600, 400)
+*/
+
 void drawLine(Image* image, int x1, int y1, int x2, int y2) {
-  double coeficient = (y2 - y1) / (x2 - x1);
+  int i, j;
   int diffX = x2 - x1;
   int diffY = y2 - y1;
-  // TODO: criar condições para linhas com diffX == 0 e diffY == 0
+  int currentX, currentY;
+  double coefficient = !diffX ? 0 : (double)diffY / diffX;
+  double accumulator = 0;
 
-  if (diffX >= diffY && coeficient < 0) {         // Octante 08
-  } else if (diffX >= diffY && coeficient > 0) {  // Octante 01
-  } else if (diffX <= diffY && coeficient < 0) {  // Octante 07
-  } else if (diffX <= diffY && coeficient > 0) {  // Octante 02
+  // Caso Δx ou Δy sejam 0 => linha reta vertical ou horizontal
+  if (!coefficient) {
+    if (!diffX) {  // reta vertical
+      swapIfBigger(&y2, &y1);
+      for (i = y1; i < y2; i++) {
+        sprintf(image->matrix[i][x1], "%d %d %d\n",
+                image->currentColor[0],
+                image->currentColor[1],
+                image->currentColor[2]);
+      }
+    } else {  // reta horizontal
+      swapIfBigger(&x2, &x1);
+      for (i = x1; i < x2; i++) {
+        sprintf(image->matrix[y1][i], "%d %d %d\n",
+                image->currentColor[0],
+                image->currentColor[1],
+                image->currentColor[2]);
+      }
+    }
+  } else {
+    currentX = (x1 - 1) < 0 ? 0 : (x1 - 1);
+    currentY = (y1 - 1) < 0 ? 0 : (y1 - 1);
+    if (diffX >= diffY && coefficient < 0) {  // Octante 01 => reta de baixo pra cima
+      while (currentX <= x2 && currentY >= y2) {
+        sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
+                image->currentColor[0],
+                image->currentColor[1],
+                image->currentColor[2]);
+        currentX += 1;
+        accumulator += coefficient;
+        if (accumulator <= -1) {
+          currentY -= 1;
+          accumulator = 0;
+        }
+      }                                              // TODO: refletir esse caso para os outros
+    } else if (diffX >= diffY && coefficient > 0) {  // Octante 08
+    } else if (diffX <= diffY && coefficient < 0) {  // Octante 02
+    } else if (diffX <= diffY && coefficient > 0) {  // Octante 07
+    }
   }
 }

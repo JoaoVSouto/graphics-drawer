@@ -46,6 +46,12 @@ int main() {
                           arguments.buffer[0],
                           arguments.buffer[1],
                           arguments.buffer[2]);
+        } else if (primitive == LINE) {
+          drawLine(&image,
+                   arguments.buffer[0],
+                   arguments.buffer[1],
+                   arguments.buffer[2],
+                   arguments.buffer[3]);
         }
 
         arguments.mode = false;
@@ -70,6 +76,10 @@ int main() {
       primitive = COLOR;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(3, sizeof(int));
+    } else if (strstr(token, "line") != NULL) {
+      primitive = LINE;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(4, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);

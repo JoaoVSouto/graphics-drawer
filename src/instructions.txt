@@ -1,4 +1,7 @@
-image 3 2
-clear 255 255 0
-color 255 0 255
+image 600 400
+clear 0 0 0
+color 255 255 255
+line 300 0 300 400
+line 0 200 600 200
+line 0 400 600 200
 save test.ppm

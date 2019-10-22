@@ -21,3 +21,13 @@ bool checkIfHasN(char* string, unsigned int stringLen) {
 
   return hasN;
 }
+
+void swapIfBigger(int* x, int* y) {
+  int aux;
+
+  if (*x < *y) {
+    aux = *x;
+    *x = *y;
+    *y = aux;
+  }
+}
