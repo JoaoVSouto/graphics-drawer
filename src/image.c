@@ -53,11 +53,12 @@ void setCurrentColor(Image* image, int red, int green, int blue) {
 
 void drawLine(Image* image, int x1, int y1, int x2, int y2) {
   int i, j;
-  int diffX = x2 - x1;
-  int diffY = y2 - y1;
+  const int diffX = x2 - x1;
+  const int diffY = y2 - y1;
   int currentX, currentY;
-  double coefficient = !diffX ? 0 : (double)diffY / diffX;
-  double accumulator = 0;
+  const double coefficient = !diffX ? 0 : (double)diffY / diffX;
+  const int derivation = 2 * (y2 - y1);
+  int slopeError = derivation - (x2 - x1);
 
   // Caso Δx ou Δy sejam 0 => linha reta vertical ou horizontal
   if (!coefficient) {
@@ -82,18 +83,18 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
     currentX = (x1 - 1) < 0 ? 0 : (x1 - 1);
     currentY = (y1 - 1) < 0 ? 0 : (y1 - 1);
     if (diffX >= diffY && coefficient < 0) {  // Octante 01 => reta de baixo pra cima
-      while (currentX <= x2 && currentY >= y2) {
+      while (currentX <= x2 - 1 && currentY >= y2) {
         sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
                 image->currentColor[0],
                 image->currentColor[1],
                 image->currentColor[2]);
         currentX += 1;
-        accumulator += coefficient;
-        if (accumulator <= -1) {
+        slopeError += derivation * -1;
+        if (slopeError >= 0) {
           currentY -= 1;
-          accumulator = 0;
+          slopeError -= 2 * (x2 - x1);
         }
-      }                                              // TODO: refletir esse caso para os outros
+      }
     } else if (diffX >= diffY && coefficient > 0) {  // Octante 08
     } else if (diffX <= diffY && coefficient < 0) {  // Octante 02
     } else if (diffX <= diffY && coefficient > 0) {  // Octante 07
