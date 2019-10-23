@@ -1,0 +1,6 @@
+line 300 0 300 400 => reta vertical
+line 0 200 600 200 => reta horizontal
+line 0 400 600 200 => reta octante 01
+line 0 0 600 200 => reta octante 08
+line 150 400 300 0 => reta octante 02
+line 300 0 450 400 => reta octante 07

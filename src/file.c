@@ -26,7 +26,7 @@ char* readInstructions() {
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
     fileContent[fileSize] = '\0';
-    printf("Leitura arquivo realizada com sucesso!\n");
+    printf("Leitura do arquivo realizada com sucesso!\n");
 
     fclose(file);
   }

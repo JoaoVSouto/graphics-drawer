@@ -12,6 +12,7 @@ typedef struct Arguments {
 
 void clearBuffer(int buffer[], int size);
 bool checkIfHasN(char* string, unsigned int stringLen);
-void swapIfBigger(int* x, int* y);
+void swapNumbers(int* x, int* y);
+bool swapIfBigger(int* x, int* y);
 
 #endif

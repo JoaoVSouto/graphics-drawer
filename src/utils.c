@@ -22,12 +22,24 @@ bool checkIfHasN(char* string, unsigned int stringLen) {
   return hasN;
 }
 
-void swapIfBigger(int* x, int* y) {
+void swapNumbers(int* x, int* y) {
   int aux;
+
+  aux = *x;
+  *x = *y;
+  *y = aux;
+}
+
+bool swapIfBigger(int* x, int* y) {
+  int aux;
+  bool changed = false;
 
   if (*x < *y) {
     aux = *x;
     *x = *y;
     *y = aux;
+    changed = true;
   }
+
+  return changed;
 }
