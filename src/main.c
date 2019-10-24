@@ -32,26 +32,46 @@ int main() {
 
       // Caso encontre o último argumento:
       if (checkIfHasN(token, strlen(token)) == true) {
-        if (primitive == IMAGE) {
-          createImage(&image, arguments.buffer[0], arguments.buffer[1]);
-        } else if (primitive == SAVE) {
-          saveImage(&image, token);
-        } else if (primitive == CLEAR) {
-          clearImage(&image,
+        switch (primitive) {
+          case IMAGE:
+            createImage(&image, arguments.buffer[0], arguments.buffer[1]);
+            break;
+
+          case SAVE:
+            saveImage(&image, token);
+            break;
+
+          case CLEAR:
+            clearImage(&image,
+                       arguments.buffer[0],
+                       arguments.buffer[1],
+                       arguments.buffer[2]);
+            break;
+
+          case COLOR:
+            setCurrentColor(&image,
+                            arguments.buffer[0],
+                            arguments.buffer[1],
+                            arguments.buffer[2]);
+            break;
+
+          case LINE:
+            drawLine(&image,
                      arguments.buffer[0],
                      arguments.buffer[1],
-                     arguments.buffer[2]);
-        } else if (primitive == COLOR) {
-          setCurrentColor(&image,
-                          arguments.buffer[0],
-                          arguments.buffer[1],
-                          arguments.buffer[2]);
-        } else if (primitive == LINE) {
-          drawLine(&image,
-                   arguments.buffer[0],
-                   arguments.buffer[1],
-                   arguments.buffer[2],
-                   arguments.buffer[3]);
+                     arguments.buffer[2],
+                     arguments.buffer[3]);
+            break;
+
+          case CIRCLE:
+            drawCircle(&image,
+                       arguments.buffer[0],
+                       arguments.buffer[1],
+                       arguments.buffer[2]);
+            break;
+
+          default:
+            break;
         }
 
         arguments.mode = false;
@@ -80,6 +100,10 @@ int main() {
       primitive = LINE;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(4, sizeof(int));
+    } else if (strstr(token, "circle") != NULL) {
+      primitive = CIRCLE;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(3, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);

@@ -67,18 +67,12 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
     if (!diffX) {  // reta vertical
       swapIfBigger(&y2, &y1);
       for (i = y1; i < y2; i++) {
-        sprintf(image->matrix[i][x1], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, x1, i);
       }
     } else {  // reta horizontal
       swapIfBigger(&x2, &x1);
       for (i = x1; i < x2; i++) {
-        sprintf(image->matrix[y1][i], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, i, y1);
       }
     }
   } else {
@@ -95,13 +89,13 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
       }
 
       for (currentX = x1; currentX < x2; currentX++) {
-        sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, currentX, currentY);
         error += slope;
         if (error <= -0.5) {
           currentY -= 1;
+          if (currentY < 0) {
+            currentY = 0;
+          }
           error += 1;
         }
       }
@@ -112,13 +106,13 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
       }
 
       for (currentX = x1; currentX < x2; currentX++) {
-        sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, currentX, currentY);
         error += slope;
         if (error >= 0.5) {
           currentY += 1;
+          if (currentY >= image->rows) {
+            currentY = image->rows - 1;
+          }
           error -= 1;
         }
       }
@@ -129,13 +123,13 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
       }
 
       for (currentY = y1 - 1; currentY > y2; currentY--) {
-        sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, currentX, currentY);
         error += slope;
         if (error <= -0.5) {
           currentX += 1;
+          if (currentX >= image->columns) {
+            currentX = image->columns - 1;
+          }
           error += 1;
         }
       }
@@ -146,16 +140,75 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
       }
 
       for (currentY = y1; currentY < y2; currentY++) {
-        sprintf(image->matrix[currentY][currentX], "%d %d %d\n",
-                image->currentColor[0],
-                image->currentColor[1],
-                image->currentColor[2]);
+        putPixel(image, currentX, currentY);
         error += slope;
         if (error >= 0.5) {
           currentX += 1;
+          if (currentX >= image->columns) {
+            currentX = image->columns - 1;
+          }
           error -= 1;
         }
       }
     }
   }
+}
+
+// baseado no algoritmo do https://iq.opengenus.org/bresenhams-circle-drawing-algorithm/
+void drawCircle(Image* image, int xC, int yC, int radius) {
+  // (xC, yC) indica o ponto central do círculo
+  int currentX = 0;
+  int currentY = radius;
+  int decisionParam = 3 - (2 * radius);
+
+  displayCircle(image, xC, yC, currentX, currentY);
+
+  while (currentY >= currentX) {
+    currentX += 1;
+
+    if (decisionParam > 0) {
+      currentY -= 1;
+      decisionParam += 4 * (currentX - currentY) + 10;
+    } else {
+      decisionParam += 4 * currentX + 6;
+    }
+
+    displayCircle(image, xC, yC, currentX, currentY);
+  }
+}
+
+void displayCircle(Image* image, int xC, int yC, int x, int y) {
+  // Condicionais são realizadas para que caso o círculo seja desenhado
+  // no extremo da imagem, seja impedido de gerar segmentation fault
+  if (xC + x >= 0 && xC + x < image->columns && yC + y >= 0 && yC + y < image->rows) {
+    putPixel(image, xC + x, yC + y);  // Octante 1
+  }
+  if (xC - x >= 0 && xC - x < image->columns && yC + y >= 0 && yC + y < image->rows) {
+    putPixel(image, xC - x, yC + y);  // Octante 4
+  }
+  if (xC + x >= 0 && xC + x < image->columns && yC - y >= 0 && yC - y < image->rows) {
+    putPixel(image, xC + x, yC - y);  // Octante 8
+  }
+  if (xC - x >= 0 && xC - x < image->columns && yC - y >= 0 && yC - y < image->rows) {
+    putPixel(image, xC - x, yC - y);  // Octante 5
+  }
+  if (xC + y >= 0 && xC + y < image->columns && yC + x >= 0 && yC + x < image->rows) {
+    putPixel(image, xC + y, yC + x);  // Octante 2
+  }
+  if (xC - y >= 0 && xC - y < image->columns && yC + x >= 0 && yC + x < image->rows) {
+    putPixel(image, xC - y, yC + x);  // Octante 3
+  }
+  if (xC + y >= 0 && xC + y < image->columns && yC - x >= 0 && yC - x < image->rows) {
+    putPixel(image, xC + y, yC - x);  // Octante 7
+  }
+  if (xC - y >= 0 && xC - y < image->columns && yC - x >= 0 && yC - x < image->rows) {
+    putPixel(image, xC - y, yC - x);  // Octante 6
+  }
+}
+
+void putPixel(Image* image, int x, int y) {
+  sprintf(image->matrix[y][x], "%d %d %d\n",
+          image->currentColor[0],
+          image->currentColor[1],
+          image->currentColor[2]);
 }

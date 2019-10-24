@@ -21,7 +21,7 @@ char* readInstructions() {
     fseek(file, 0, SEEK_SET);
 
     // Aloca espaço de memória suficiente para formar a string
-    fileContent = malloc(fileSize);
+    fileContent = malloc(fileSize + 1);  // fileSize + 1 porque com fileSize + 0 gera segmentation fault
     // Lê o arquivo passando como argumentos:
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
