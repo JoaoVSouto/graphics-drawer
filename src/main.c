@@ -5,6 +5,8 @@
 #include "image.h"
 #include "utils.h"
 
+#define POLYGON_QTD_COORDINATES 2
+
 int main() {
   char* instructions = readInstructions();
   char* token;
@@ -12,6 +14,10 @@ int main() {
 
   int i, j;
   primitives primitive;
+
+  int** polygonPoints;
+  int polygonPointsCounter = 0;
+  int polygonQntPoints;
 
   Arguments arguments;
   arguments.counter = 0;
@@ -29,6 +35,21 @@ int main() {
   while (token != NULL) {
     if (arguments.mode == true) {
       arguments.buffer[arguments.counter++] = atoi(token);
+
+      if (primitive == POLYGON_POINTS) {
+        primitive = POLYGON_COORDINATES;
+
+        polygonQntPoints = arguments.buffer[0];
+
+        polygonPoints = (int**)calloc(polygonQntPoints, sizeof(int*));
+        for (i = 0; i < polygonQntPoints; i++) {
+          polygonPoints[i] = (int*)calloc(POLYGON_QTD_COORDINATES, sizeof(int));
+        }
+
+        arguments.counter = 0;
+        arguments.buffer = (int*)calloc(polygonQntPoints * POLYGON_QTD_COORDINATES,
+                                        sizeof(int));
+      }
 
       // Caso encontre o último argumento:
       if (checkIfHasN(token, strlen(token)) == true) {
@@ -70,6 +91,16 @@ int main() {
                        arguments.buffer[2]);
             break;
 
+          case POLYGON_COORDINATES:
+            for (i = 0; i < arguments.counter; i += 2) {
+              polygonPoints[polygonPointsCounter][0] = arguments.buffer[i];
+              polygonPoints[polygonPointsCounter][1] = arguments.buffer[i + 1];
+              polygonPointsCounter += 1;
+            }
+            polygonPointsCounter = 0;
+            drawPolygon(&image, polygonQntPoints, polygonPoints);
+            break;
+
           default:
             break;
         }
@@ -104,11 +135,19 @@ int main() {
       primitive = CIRCLE;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(3, sizeof(int));
+    } else if (strstr(token, "polygon") != NULL) {
+      primitive = POLYGON_POINTS;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(1, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);
   }
 
+  for (i = 0; i < polygonQntPoints; i++) {
+    free(polygonPoints[i]);
+  }
+  free(polygonPoints);
   for (i = 0; i < image.rows; i++) {
     for (j = 0; j < image.columns; j++) {
       free(image.matrix[i][j]);

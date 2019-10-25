@@ -28,4 +28,6 @@ circle 300 0 50
 circle 300 400 50
 circle 0 200 50
 circle 600 200 50
+polygon 3 0 400 300 200 600 400
+polygon 2 300 300 600 600
 save test.ppm

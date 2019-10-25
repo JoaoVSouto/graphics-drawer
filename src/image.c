@@ -206,6 +206,16 @@ void displayCircle(Image* image, int xC, int yC, int x, int y) {
   }
 }
 
+void drawPolygon(Image* image, int polygonQntPoints, int** polygonPoints) {
+  int i;
+
+  printf("ele tem %d pontos\n", polygonQntPoints);
+  for (i = 0; i < polygonQntPoints; i++) {
+    printf("polygonPoints[%d][0] = %d\n", i, polygonPoints[i][0]);
+    printf("polygonPoints[%d][1] = %d\n", i, polygonPoints[i][1]);
+  }
+}
+
 void putPixel(Image* image, int x, int y) {
   sprintf(image->matrix[y][x], "%d %d %d\n",
           image->currentColor[0],
