@@ -101,6 +101,14 @@ int main() {
             drawPolygon(&image, polygonQntPoints, polygonPoints);
             break;
 
+          case RECT:
+            drawRectangle(&image,
+                          arguments.buffer[0],
+                          arguments.buffer[1],
+                          arguments.buffer[2],
+                          arguments.buffer[3]);
+            break;
+
           default:
             break;
         }
@@ -139,6 +147,10 @@ int main() {
       primitive = POLYGON_POINTS;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(1, sizeof(int));
+    } else if (strstr(token, "rect") != NULL) {
+      primitive = RECT;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(4, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);

@@ -256,6 +256,27 @@ void drawPolygon(Image* image, int polygonQntPoints, int** polygonPoints) {
   }
 }
 
+void drawRectangle(Image* image, int x1, int y1, int x2, int y2) {
+  int height, width;
+
+  // Assegura que a coordenada mais a esquerda sempre ficará no x1
+  if (swapIfBigger(&x2, &x1) == true) {
+    swapNumbers(&y2, &y1);
+  }
+
+  height = y2 - y1;
+  width = x2 - x1;
+
+  // desenhando linha vertical esquerda
+  drawLine(image, x1, y1, x1, y1 + height);
+  // desenhando linha horizontal de baixo
+  drawLine(image, x1, y1, x1 + width, y1);
+  // desenhando linha vertical direita
+  drawLine(image, x1 + width, y1, x2, y2);
+  // desenhando linha horizontal de cima
+  drawLine(image, x1, y1 + height, x2, y2);
+}
+
 void putPixel(Image* image, int x, int y) {
   sprintf(image->matrix[y][x], "%d %d %d\n",
           image->currentColor[0],
