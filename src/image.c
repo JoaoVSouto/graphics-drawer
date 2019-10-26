@@ -66,11 +66,30 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
   if (!slope) {
     if (!diffX) {  // reta vertical
       swapIfBigger(&y2, &y1);
+
+      // Caso ultrapasse o limite da imagem
+      if (y2 >= image->rows) {
+        y2 = image->rows - 1;
+      }
+
+      if (x1 >= image->columns) {
+        x1 = image->columns - 1;
+      }
+
       for (i = y1; i < y2; i++) {
         putPixel(image, x1, i);
       }
     } else {  // reta horizontal
       swapIfBigger(&x2, &x1);
+
+      if (y1 >= image->rows) {
+        y1 = image->rows - 1;
+      }
+
+      if (x2 >= image->columns) {
+        x2 = image->columns - 1;
+      }
+
       for (i = x1; i < x2; i++) {
         putPixel(image, i, y1);
       }
@@ -207,12 +226,33 @@ void displayCircle(Image* image, int xC, int yC, int x, int y) {
 }
 
 void drawPolygon(Image* image, int polygonQntPoints, int** polygonPoints) {
-  int i;
+  int previousPoint[2], currentPoint[2];
+  int polygonPointsRemover = 0;
 
-  printf("ele tem %d pontos\n", polygonQntPoints);
-  for (i = 0; i < polygonQntPoints; i++) {
-    printf("polygonPoints[%d][0] = %d\n", i, polygonPoints[i][0]);
-    printf("polygonPoints[%d][1] = %d\n", i, polygonPoints[i][1]);
+  if (polygonQntPoints > 2) {
+    // Desenhando a linha que liga o primeiro ponto ao último
+    drawLine(image,
+             polygonPoints[0][0],
+             polygonPoints[0][1],
+             polygonPoints[polygonQntPoints - 1][0],
+             polygonPoints[polygonQntPoints - 1][1]);
+  }
+
+  if (polygonQntPoints > 0) {
+    previousPoint[0] = polygonPoints[polygonPointsRemover][0];
+    previousPoint[1] = polygonPoints[polygonPointsRemover++][1];
+    polygonQntPoints -= 1;
+  }
+
+  while (polygonQntPoints > 0) {
+    currentPoint[0] = polygonPoints[polygonPointsRemover][0];
+    currentPoint[1] = polygonPoints[polygonPointsRemover++][1];
+    polygonQntPoints -= 1;
+
+    drawLine(image, previousPoint[0], previousPoint[1], currentPoint[0], currentPoint[1]);
+
+    previousPoint[0] = currentPoint[0];
+    previousPoint[1] = currentPoint[1];
   }
 }
 
