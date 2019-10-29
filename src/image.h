@@ -36,6 +36,7 @@ void displayCircle(Image* image, int xC, int yC, int x, int y);
 void drawPolygon(Image* image, int polygonQntPoints, int** polygonPoints);
 void drawRectangle(Image* image, int x1, int y1, int x2, int y2);
 void fillPolygon(Image* image, int x, int y);
+void floodFill(Image* image, int x, int y, char targetColor[], char replacementColor[]);
 bool_trespass isColorDiffFromPixel(Image* image, int rgb[], int x, int y);
 void putPixel(Image* image, int x, int y);
 
