@@ -2,7 +2,6 @@
 #define _UTILS_H_
 
 #include <string.h>
-#include "image.h"
 
 typedef enum bool { false,
                     true } bool;

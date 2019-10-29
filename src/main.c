@@ -15,9 +15,9 @@ int main() {
   int i, j;
   primitives primitive;
 
-  int** polygonPoints;
+  int** polygonPoints = NULL;
   int polygonPointsCounter = 0;
-  int polygonQntPoints;
+  int polygonQntPoints = 0;
 
   Arguments arguments;
   arguments.counter = 0;
@@ -167,7 +167,9 @@ int main() {
   for (i = 0; i < polygonQntPoints; i++) {
     free(polygonPoints[i]);
   }
-  free(polygonPoints);
+  if (polygonPoints != NULL) {
+    free(polygonPoints);
+  }
   for (i = 0; i < image.rows; i++) {
     for (j = 0; j < image.columns; j++) {
       free(image.matrix[i][j]);

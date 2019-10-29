@@ -9,5 +9,4 @@ rect 450 100 600 0
 rect 150 100 0 0
 rect 500 250 100 200
 color 255 255 255
-fill 130 225
 save test.ppm
