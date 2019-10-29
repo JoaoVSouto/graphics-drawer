@@ -109,6 +109,10 @@ int main() {
                           arguments.buffer[3]);
             break;
 
+          case FILL:
+            fillPolygon(&image, arguments.buffer[0], arguments.buffer[1]);
+            break;
+
           default:
             break;
         }
@@ -151,6 +155,10 @@ int main() {
       primitive = RECT;
       arguments.mode = true;
       arguments.buffer = (int*)calloc(4, sizeof(int));
+    } else if (strstr(token, "fill") != NULL) {
+      primitive = FILL;
+      arguments.mode = true;
+      arguments.buffer = (int*)calloc(2, sizeof(int));
     }
 
     token = strtok(NULL, blankSpace);

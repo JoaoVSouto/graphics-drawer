@@ -7,6 +7,10 @@
 typedef enum bool { false,
                     true } bool;
 
+typedef enum bool_trespass { falsy,
+                             truthy,
+                             trespass } bool_trespass;
+
 typedef struct Arguments {
   int* buffer;
   int counter;

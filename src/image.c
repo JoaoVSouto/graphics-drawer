@@ -277,6 +277,121 @@ void drawRectangle(Image* image, int x1, int y1, int x2, int y2) {
   drawLine(image, x1, y1 + height, x2, y2);
 }
 
+void fillPolygon(Image* image, int x, int y) {
+  int i, currentX, currentY;
+  int colorToBeFilled[3];
+  int count = 0;
+  int countColorLeftRight = 0;
+  int countColorUpDown = 0;
+  int rightOffset = 1,
+      downOffset = 2,
+      leftOffset = 2,
+      upOffset = 3;
+  int xCounter = 0, yCounter = 0;
+  int snapshot[2];
+  bool_trespass isDifferent;
+
+  sscanf(image->matrix[y][x], "%d %d %d\n",
+         &colorToBeFilled[0],
+         &colorToBeFilled[1],
+         &colorToBeFilled[2]);
+
+  currentX = (x - 1) < 0 ? 0 : (x - 1);
+  currentY = (y - 1) < 0 ? 0 : (y - 1);
+
+  if (isColorDiffFromPixel(image, image->currentColor, x, y)) {
+    /*
+      A ideia do algoritmo é: dado o ponto inicial, uma espiral sera formada em
+      volta dele, até que a área esteja totalmente preenchida
+   */
+    if (!isColorDiffFromPixel(image, colorToBeFilled, currentX, currentY)) {
+      putPixel(image, currentX, currentY);
+    }
+    if (!isColorDiffFromPixel(image, colorToBeFilled, currentX, --currentY)) {
+      putPixel(image, currentX, currentY);
+    }
+    // TODO: Tentar pegar a fatia do que sobrou e colocar no que faltou
+    while (true) {
+      if (count++ > 23) break;
+      // para direita
+      while (xCounter++ < rightOffset) {
+        isDifferent = isColorDiffFromPixel(image, colorToBeFilled, ++currentX, currentY);
+        if (isDifferent == truthy) {
+          printf("passou por cor direita, y = %d\n", currentY);
+          countColorLeftRight++;
+        }
+        if (!isDifferent) {
+          putPixel(image, currentX, currentY);
+        }
+      }
+      xCounter = 0;
+      rightOffset += 2;
+      // para baixo
+      while (yCounter++ < downOffset) {
+        isDifferent = isColorDiffFromPixel(image, colorToBeFilled, currentX, ++currentY);
+        if (isDifferent == truthy) {
+          printf("passou por cor baixo, x = %d\n", currentX);
+          countColorUpDown++;
+        }
+        if (!isDifferent) {
+          putPixel(image, currentX, currentY);
+        }
+      }
+      yCounter = 0;
+      downOffset += 2;
+      // para esquerda
+      while (xCounter++ < leftOffset) {
+        isDifferent = isColorDiffFromPixel(image, colorToBeFilled, --currentX, currentY);
+        if (isDifferent == truthy) {
+          printf("passou por cor esquerda, y = %d\n", currentY);
+          countColorLeftRight--;
+        }
+        if (!isDifferent) {
+          putPixel(image, currentX, currentY);
+        }
+      }
+      xCounter = 0;
+      leftOffset += 2;
+      // para cima
+      while (yCounter++ < upOffset) {
+        isDifferent = isColorDiffFromPixel(image, colorToBeFilled, currentX, --currentY);
+        if (isDifferent == truthy) {
+          printf("passou por cor cima, x = %d\n", currentX);
+          countColorUpDown--;
+        }
+        if (!isDifferent) {
+          putPixel(image, currentX, currentY);
+          snapshot[0] = currentX;
+          snapshot[1] = currentY;
+        }
+      }
+      yCounter = 0;
+      upOffset += 2;
+    }
+    printf("left & right: %d\n", countColorLeftRight);
+    printf("up & down: %d\n", countColorUpDown);
+  }
+}
+
+bool_trespass isColorDiffFromPixel(Image* image, int rgb[], int x, int y) {
+  bool_trespass isDifferent = falsy;
+  char pixelString[MAX_CHARS_PER_LINE];
+  char rgbString[MAX_CHARS_PER_LINE];
+
+  if (x < 0 || y < 0 || x >= image->columns || y >= image->rows) {
+    return trespass;
+  }
+
+  strcpy(pixelString, image->matrix[y][x]);
+  sprintf(rgbString, "%d %d %d\n", rgb[0], rgb[1], rgb[2]);
+
+  if (strcmp(pixelString, rgbString)) {
+    isDifferent = truthy;
+  }
+
+  return isDifferent;
+}
+
 void putPixel(Image* image, int x, int y) {
   sprintf(image->matrix[y][x], "%d %d %d\n",
           image->currentColor[0],
