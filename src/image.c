@@ -283,12 +283,13 @@ void fillPolygon(Image* image, int x, int y) {
 
   strcpy(targetColor, image->matrix[y][x]);
   sprintf(replacementColor, "%d %d %d\n", image->currentColor[0],
-                                          image->currentColor[1],
-                                          image->currentColor[2]);
+          image->currentColor[1],
+          image->currentColor[2]);
 
   floodFill(image, x, y, targetColor, replacementColor);
 }
 
+// algoritmo baseado no https://en.wikipedia.org/wiki/Flood_fill
 void floodFill(Image* image, int x, int y, char targetColor[], char replacementColor[]) {
   if (!strcmp(targetColor, replacementColor)) return;
   int rgb[3];
