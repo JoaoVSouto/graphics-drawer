@@ -4,8 +4,10 @@
 #include "image.h"
 #include "utils.h"
 
-char* readInstructions();
-bool saveImage(Image* image, char* bruteImageName);
+char* readFile(char* fileName);
+void saveImage(Image* image, char* bruteImageName);
+void saveFile(char* fileName, char* fileContent);
 void compressImage(char* image);
+void decompressImage(char* fileName, char* imageContent);
 
 #endif

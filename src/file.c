@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* readInstructions() {
+char* readFile(char* fileName) {
   FILE* file;
   char* fileContent;
   long fileSize;
 
-  file = fopen("instructions.txt", "r");
+  file = fopen(fileName, "r");
 
   if (file == NULL) {
-    printf("Erro na leitura de instructions.txt\n");
+    printf("Erro na leitura de %s\n", fileName);
   } else {
     // Seta o cursor para o final do arquivo
     fseek(file, 0, SEEK_END);
@@ -26,7 +26,7 @@ char* readInstructions() {
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
     fileContent[fileSize] = '\0';
-    printf("Leitura do arquivo realizada com sucesso!\n");
+    printf("Leitura do %s realizada com sucesso!\n", fileName);
 
     fclose(file);
   }
@@ -34,13 +34,11 @@ char* readInstructions() {
   return fileContent;
 }
 
-bool saveImage(Image* image, char* bruteImageName) {
+void saveImage(Image* image, char* bruteImageName) {
   char* imageName;
-  FILE* file;
-  bool saveSuccess = false;
   int i, j;
 
-  imageName = (char*)calloc(strlen(bruteImageName), sizeof(char));
+  imageName = (char*)malloc(strlen(bruteImageName));
 
   strcpy(imageName, bruteImageName);
   imageName[strlen(imageName) - 1] = '\0';
@@ -58,22 +56,25 @@ bool saveImage(Image* image, char* bruteImageName) {
 
   compressImage(image->image);
 
-  file = fopen(imageName, "w");
+  saveFile(imageName, image->image);
+
+  free(imageName);
+}
+
+void saveFile(char* fileName, char* fileContent) {
+  FILE* file;
+
+  file = fopen(fileName, "w");
 
   if (file == NULL) {
-    printf("Erro na abertura do arquivo %s para escrita\n", imageName);
+    printf("\e[38;5;196mERRO: Não foi possível abrir %s\n", fileName);
   } else {
-    if (fputs(image->image, file) != EOF) {
+    if (fputs(fileContent, file) != EOF) {
       printf("Arquivo salvo com sucesso!\n");
-      saveSuccess = true;
     }
 
     fclose(file);
   }
-
-  free(imageName);
-
-  return saveSuccess;
 }
 
 void compressImage(char* image) {
@@ -99,12 +100,17 @@ void compressImage(char* image) {
   while (token != NULL) {
     // Pula o cabeçalho
     if (lineNumber <= 3) {
-      lineNumber++;
-      sprintf(currentLine, "%s\n", token);
+      // Adiciona marcador de compressão na primeira linha do arquivo
+      if (lineNumber == 1) {
+        sprintf(currentLine, "%s#\n", token);
+      } else {
+        sprintf(currentLine, "%s\n", token);
+      }
       strcat(imageCompressed, currentLine);
-    } else if (lineNumber == 4) {
       lineNumber++;
+    } else if (lineNumber == 4) {
       sprintf(previousLine, "%s\n", token);
+      lineNumber++;
     } else {
       sprintf(currentLine, "%s\n", token);
       // caso a linha anterior e a linha atual forem iguais, incrementar o counter
@@ -126,4 +132,72 @@ void compressImage(char* image) {
   strcpy(image, imageCompressed);
 
   free(imageCompressed);
+}
+
+void decompressImage(char* fileName, char* imageContent) {
+  const char newLine[2] = "\n";
+  char* token;
+  char* imageDecompressed;
+  char* decompressionMarker;
+  char* imageCopy;
+  char currentLine[MAX_CHARS_PER_LINE];
+  int pixelColor[3];
+  int numberOfLines = 4,  // 3 + 1 => número de linhas do cabeçalho e nova linha
+      lineNumber = 1,
+      numberOfRepetitions,
+      i;
+
+  // Detectando se a imagem já está descomprimida
+  decompressionMarker = strchr(imageContent, '#');
+  if (decompressionMarker == NULL) {
+    printf("\e[38;5;196mERRO: A imagem já está descomprimida...\n");
+    return;
+  }
+
+  imageCopy = (char*)malloc(strlen(imageContent));
+  strcpy(imageCopy, imageContent);
+
+  token = strtok(imageCopy, newLine);
+
+  // Descobrindo o número de linhas que terá o arquivo descomprimido
+  while (token != NULL) {
+    if (lineNumber <= 3) {
+      lineNumber++;
+    } else {
+      sscanf(token, "%d", &numberOfRepetitions);
+      numberOfLines += numberOfRepetitions;
+    }
+
+    token = strtok(NULL, newLine);
+  }
+  imageDecompressed = (char*)malloc(numberOfLines * MAX_CHARS_PER_LINE);
+
+  lineNumber = 1;
+  token = strtok(imageContent, newLine);
+
+  while (token != NULL) {
+    // Pulando o cabeçalho
+    if (lineNumber <= 3) {
+      if (lineNumber == 1) {  // Removendo a # do cabeçalho
+        removeLastChar(token);
+      }
+      sprintf(currentLine, "%s\n", token);
+      strcat(imageDecompressed, currentLine);
+      lineNumber++;
+    } else {
+      sscanf(token, "%d(%d %d %d)", &numberOfRepetitions,
+             &pixelColor[0], &pixelColor[1], &pixelColor[2]);
+      sprintf(currentLine, "%d %d %d\n", pixelColor[0],
+              pixelColor[1], pixelColor[2]);
+
+      for (i = 0; i < numberOfRepetitions; i++) {
+        strcat(imageDecompressed, currentLine);
+      }
+    }
+    token = strtok(NULL, newLine);
+  }
+
+  saveFile(fileName, imageDecompressed);
+
+  free(imageDecompressed);
 }

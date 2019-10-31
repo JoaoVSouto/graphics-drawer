@@ -5,8 +5,8 @@
 #include "image.h"
 #include "utils.h"
 
-int main(int argc, char const* argv[]) {
-  char* instructions;
+int main(int argc, char* argv[]) {
+  char* fileRead;
   char* token;
   const char blankSpace[2] = " ";
 
@@ -31,13 +31,17 @@ int main(int argc, char const* argv[]) {
   image.currentColor[2] = 0;
 
   if (argv[1] != NULL && !strcmp(argv[1], "-d")) {
-    printf("DECOMPRESS MODE on image: %s\n", argv[2]);
-    // TODO: Criar função para descomprimir a imagem
+    if (argv[2] == NULL) {
+      printf("\e[38;5;196mERRO: Forneça o nome da imagem com a sua extensão!\n");
+    } else {
+      fileRead = readFile(argv[2]);
+      decompressImage(argv[2], fileRead);
+    }
   } else {
-    instructions = readInstructions();
+    fileRead = readFile("instructions.txt");
 
     // Divide a string em tokens, que no caso são espaços em branco
-    token = strtok(instructions, blankSpace);
+    token = strtok(fileRead, blankSpace);
 
     while (token != NULL) {
       if (arguments.mode == true) {
