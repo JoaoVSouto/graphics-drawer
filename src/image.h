@@ -8,6 +8,7 @@
 
 #define MAX_CHARS_PER_LINE 12
 #define HEADER_SIZE 20
+#define POLYGON_QTD_COORDINATES 2
 
 typedef enum primitives {
   IMAGE,
