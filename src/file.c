@@ -11,7 +11,7 @@ char* readFile(char* fileName) {
   file = fopen(fileName, "r");
 
   if (file == NULL) {
-    printf("Erro na leitura de %s\n", fileName);
+    printf("\e[38;5;196mERRO: Erro na leitura de %s\n", fileName);
   } else {
     // Seta o cursor para o final do arquivo
     fseek(file, 0, SEEK_END);
@@ -26,7 +26,7 @@ char* readFile(char* fileName) {
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
     fileContent[fileSize] = '\0';
-    printf("Leitura do %s realizada com sucesso!\n", fileName);
+    printf("\e[40;38;5;82mSUCESSO: Leitura do \e[30;48;5;82m %s \e[0m \e[40;38;5;82mrealizada!\n", fileName);
 
     fclose(file);
   }
@@ -70,7 +70,7 @@ void saveFile(char* fileName, char* fileContent) {
     printf("\e[38;5;196mERRO: Não foi possível abrir %s\n", fileName);
   } else {
     if (fputs(fileContent, file) != EOF) {
-      printf("Arquivo salvo com sucesso!\n");
+      printf("SUCESSO: \e[30;48;5;82m %s \e[0m \e[40;38;5;82msalvo!\n", fileName);
     }
 
     fclose(file);
@@ -196,6 +196,8 @@ void decompressImage(char* fileName, char* imageContent) {
     }
     token = strtok(NULL, newLine);
   }
+
+  printf("SUCESSO: Descompressão realizada!\n");
 
   saveFile(fileName, imageDecompressed);
 
