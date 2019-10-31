@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include "utils.h"
 
+#define MAX_CHARS_PER_LINE 12
+#define HEADER_SIZE 20
+
 typedef enum primitives {
   IMAGE,
   COLOR,

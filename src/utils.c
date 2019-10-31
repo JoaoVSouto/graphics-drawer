@@ -43,3 +43,18 @@ bool swapIfBigger(int* x, int* y) {
 
   return changed;
 }
+
+void removeLastChar(char* string) {
+  int i;
+  char* newString;
+
+  newString = (char*)calloc(strlen(string) - 1, sizeof(char));
+
+  for (i = 0; i < strlen(string) - 1; i++) {
+    newString[i] = string[i];
+  }
+
+  strcpy(string, newString);
+
+  free(newString);
+}

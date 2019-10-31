@@ -6,5 +6,6 @@
 
 char* readInstructions();
 bool saveImage(Image* image, char* bruteImageName);
+void compressImage(char* image);
 
 #endif

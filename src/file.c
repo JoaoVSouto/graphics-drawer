@@ -56,6 +56,8 @@ bool saveImage(Image* image, char* bruteImageName) {
     }
   }
 
+  compressImage(image->image);
+
   file = fopen(imageName, "w");
 
   if (file == NULL) {
@@ -72,4 +74,56 @@ bool saveImage(Image* image, char* bruteImageName) {
   free(imageName);
 
   return saveSuccess;
+}
+
+void compressImage(char* image) {
+  int i, counter = 1, lineNumber = 1;
+  const char newLine[2] = "\n";
+  char* imageCompressed;
+  char* imageString;
+  char* token;
+  char currentLine[MAX_CHARS_PER_LINE + 1];
+  char previousLine[MAX_CHARS_PER_LINE + 1];
+  // exemplo de linha comprimida:
+  // 1500(255 255 255)
+  // 4 algarismos de repetição + 2 parenteses + 12 caracteres de cor
+  char compressedLine[MAX_CHARS_PER_LINE + 2 + 4];
+
+  imageCompressed = (char*)calloc(strlen(image), sizeof(char));
+  imageString = (char*)calloc(strlen(image), sizeof(char));
+
+  strcpy(imageString, image);
+
+  token = strtok(imageString, newLine);
+
+  while (token != NULL) {
+    // Pula o cabeçalho
+    if (lineNumber <= 3) {
+      lineNumber++;
+      sprintf(currentLine, "%s\n", token);
+      strcat(imageCompressed, currentLine);
+    } else if (lineNumber == 4) {
+      lineNumber++;
+      sprintf(previousLine, "%s\n", token);
+    } else {
+      sprintf(currentLine, "%s\n", token);
+      // caso a linha anterior e a linha atual forem iguais, incrementar o counter
+      if (!strcmp(previousLine, currentLine)) {
+        counter += 1;
+      } else {
+        // caso forem diferentes, concatenar na imagem a string comprimida
+        removeLastChar(previousLine);
+        sprintf(compressedLine, "%d(%s)\n", counter, previousLine);
+        strcat(imageCompressed, compressedLine);
+        counter = 1;
+      }
+      strcpy(previousLine, currentLine);
+    }
+
+    token = strtok(NULL, newLine);
+  }
+
+  strcpy(image, imageCompressed);
+
+  free(imageCompressed);
 }
