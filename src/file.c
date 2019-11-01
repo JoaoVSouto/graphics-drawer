@@ -42,11 +42,8 @@ void saveImage(Image* image, char* bruteImageName) {
 
   strcpy(imageName, bruteImageName);
   imageName[strlen(imageName) - 1] = '\0';
-  // Caso a string tenha quatro caracteres antes do ponto, adicionar mais 1 \0
-  if (strlen(imageName) == 10) {
-    imageName[strlen(imageName) - 2] = '\0';
-  }
 
+  // TODO: descobrir forma mais eficiente de concatenar string
   // Escreve a matriz na imagem
   for (i = 0; i < image->rows; i++) {
     for (j = 0; j < image->columns; j++) {
@@ -128,6 +125,10 @@ void compressImage(char* image) {
 
     token = strtok(NULL, newLine);
   }
+
+  removeLastChar(previousLine);
+  sprintf(compressedLine, "%d(%s)\n", counter, previousLine);
+  strcat(imageCompressed, compressedLine);
 
   strcpy(image, imageCompressed);
 

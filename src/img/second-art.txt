@@ -1,0 +1,41 @@
+image 600 400
+clear 0 0 0
+color 255 255 255
+line 300 0 300 400
+line 0 0 600 400
+line 0 200 600 200
+line 0 400 600 0
+color 255 255 0
+line 0 400 600 200
+line 0 200 600 0
+color 0 255 255
+line 0 0 600 200
+line 0 200 600 400
+color 255 0 0
+line 150 400 300 0
+line 150 0 300 400
+color 0 255 0
+line 300 0 450 400
+line 300 400 450 0
+color 16 124 212
+circle 300 200 50
+color 164 89 170
+circle 0 0 50
+circle 600 0 50
+circle 0 400 50
+circle 600 400 50
+circle 300 0 50
+circle 300 400 50
+circle 0 200 50
+circle 600 200 50
+color 255 0 0
+fill 320 180
+fill 320 220
+fill 260 210
+fill 260 190
+color 0 255 0
+fill 280 180
+fill 280 220
+fill 340 210
+fill 340 190
+save test.ppm
