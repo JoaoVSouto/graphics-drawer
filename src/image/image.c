@@ -24,16 +24,6 @@ void createImage(Image* image, int width, int height) {
   image->charsWritten = sprintf(image->image, "P3\n%d %d\n255\n", width, height);
 }
 
-void clearImage(Image* image, int red, int green, int blue) {
-  int i, j;
-
-  for (i = 0; i < image->rows; i++) {
-    for (j = 0; j < image->columns; j++) {
-      sprintf(image->matrix[i][j], "%d %d %d\n", red, green, blue);
-    }
-  }
-}
-
 /*
   Suponha uma figura 600x400, os pixels estão dispostos da seguinte forma:
   (0, 0)  |------------------------------| (600, 0)

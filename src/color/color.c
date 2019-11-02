@@ -1,5 +1,15 @@
 #include "color.h"
 
+void clearImage(Image* image, int red, int green, int blue) {
+  int i, j;
+
+  for (i = 0; i < image->rows; i++) {
+    for (j = 0; j < image->columns; j++) {
+      sprintf(image->matrix[i][j], "%d %d %d\n", red, green, blue);
+    }
+  }
+}
+
 void setCurrentColor(Image* image, int red, int green, int blue) {
   image->currentColor[0] = red;
   image->currentColor[1] = green;

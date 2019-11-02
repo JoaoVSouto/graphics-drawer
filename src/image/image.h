@@ -34,7 +34,6 @@ typedef struct Image {
 } Image;
 
 void createImage(Image* image, int width, int height);
-void clearImage(Image* image, int red, int green, int blue);
 void drawLine(Image* image, int x1, int y1, int x2, int y2);
 void drawCircle(Image* image, int xC, int yC, int radius);
 void displayCircle(Image* image, int xC, int yC, int x, int y);
