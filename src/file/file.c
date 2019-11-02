@@ -1,7 +1,4 @@
 #include "file.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 char* readFile(char* fileName) {
   FILE* file;

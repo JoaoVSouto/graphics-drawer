@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "color.h"
-#include "file.h"
-#include "image.h"
-#include "utils.h"
+#include "color/color.h"
+#include "file/file.h"
+#include "image/image.h"
+#include "utils/utils.h"
 
 int main(int argc, char* argv[]) {
   char* fileRead;

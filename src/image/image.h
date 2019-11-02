@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "utils.h"
+#include "../utils/utils.h"
 
 #define MAX_CHARS_PER_LINE 12
 #define HEADER_SIZE 20
