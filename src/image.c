@@ -19,7 +19,7 @@ void createImage(Image* image, int width, int height) {
   image->rows = height;
   image->columns = width;
 
-  image->image = (char*)calloc(imageSize, sizeof(char));
+  image->image = (char*)malloc(imageSize);
 
   image->charsWritten = sprintf(image->image, "P3\n%d %d\n255\n", width, height);
 }
@@ -32,12 +32,6 @@ void clearImage(Image* image, int red, int green, int blue) {
       sprintf(image->matrix[i][j], "%d %d %d\n", red, green, blue);
     }
   }
-}
-
-void setCurrentColor(Image* image, int red, int green, int blue) {
-  image->currentColor[0] = red;
-  image->currentColor[1] = green;
-  image->currentColor[2] = blue;
 }
 
 /*
@@ -175,9 +169,9 @@ void drawLine(Image* image, int x1, int y1, int x2, int y2) {
 // baseado no algoritmo do https://iq.opengenus.org/bresenhams-circle-drawing-algorithm/
 void drawCircle(Image* image, int xC, int yC, int radius) {
   // (xC, yC) indica o ponto central do círculo
-  int currentX = 0;
-  int currentY = radius;
-  int decisionParam = 3 - (2 * radius);
+  int currentX = 0,
+      currentY = radius,
+      decisionParam = 3 - (2 * radius);
 
   displayCircle(image, xC, yC, currentX, currentY);
 
@@ -274,54 +268,6 @@ void drawRectangle(Image* image, int x1, int y1, int x2, int y2) {
   drawLine(image, x1 + width, y1, x2, y2);
   // desenhando linha horizontal de cima
   drawLine(image, x1, y1 + height, x2, y2);
-}
-
-void fillPolygon(Image* image, int x, int y) {
-  char targetColor[MAX_CHARS_PER_LINE];
-  char replacementColor[MAX_CHARS_PER_LINE];
-
-  strcpy(targetColor, image->matrix[y][x]);
-  sprintf(replacementColor, "%d %d %d\n", image->currentColor[0],
-          image->currentColor[1],
-          image->currentColor[2]);
-
-  floodFill(image, x, y, targetColor, replacementColor);
-}
-
-// algoritmo baseado no https://en.wikipedia.org/wiki/Flood_fill
-void floodFill(Image* image, int x, int y, char targetColor[], char replacementColor[]) {
-  if (!strcmp(targetColor, replacementColor)) return;
-  int rgb[3];
-  sscanf(targetColor, "%d %d %d\n", &rgb[0], &rgb[1], &rgb[2]);
-  if (isColorDiffFromPixel(image, rgb, x, y)) return;
-  putPixel(image, x, y);
-  // Para o sul
-  floodFill(image, x, y + 1, targetColor, replacementColor);
-  // Para o norte
-  floodFill(image, x, y - 1, targetColor, replacementColor);
-  // Para o oeste
-  floodFill(image, x - 1, y, targetColor, replacementColor);
-  // Para o leste
-  floodFill(image, x + 1, y, targetColor, replacementColor);
-}
-
-bool_trespass isColorDiffFromPixel(Image* image, int rgb[], int x, int y) {
-  bool_trespass isDifferent = falsy;
-  char pixelString[MAX_CHARS_PER_LINE];
-  char rgbString[MAX_CHARS_PER_LINE];
-
-  if (x < 0 || y < 0 || x >= image->columns || y >= image->rows) {
-    return trespass;
-  }
-
-  strcpy(pixelString, image->matrix[y][x]);
-  sprintf(rgbString, "%d %d %d\n", rgb[0], rgb[1], rgb[2]);
-
-  if (strcmp(pixelString, rgbString)) {
-    isDifferent = truthy;
-  }
-
-  return isDifferent;
 }
 
 void putPixel(Image* image, int x, int y) {

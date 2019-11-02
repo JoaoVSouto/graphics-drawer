@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "color.h"
 #include "file.h"
 #include "image.h"
 #include "utils.h"
@@ -14,8 +15,8 @@ int main(int argc, char* argv[]) {
   primitives primitive;
 
   int** polygonPoints = NULL;
-  int polygonPointsCounter = 0;
-  int polygonQntPoints = 0;
+  int polygonPointsCounter = 0,
+      polygonQntPoints = 0;
 
   Arguments arguments;
   arguments.buffer = NULL;
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
     token = strtok(fileRead, blankSpace);
 
     while (token != NULL) {
-      if (arguments.mode == true) {
+      if (arguments.mode) {
         arguments.buffer[arguments.counter++] = atoi(token);
 
         if (primitive == POLYGON_POINTS) {
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]) {
         }
 
         // Caso encontre o último argumento:
-        if (checkIfHasN(token, strlen(token)) == true) {
+        if (checkIfHasN(token, strlen(token))) {
           switch (primitive) {
             case IMAGE:
               createImage(&image, arguments.buffer[0], arguments.buffer[1]);

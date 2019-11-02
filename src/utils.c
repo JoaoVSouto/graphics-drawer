@@ -58,3 +58,11 @@ void removeLastChar(char* string) {
 
   free(newString);
 }
+
+float bytesToMegaBytes(long bytes) {
+  return (float)bytes / pow(10, 6);
+}
+
+float bytesToKiloBytes(long bytes) {
+  return (float)bytes / pow(10, 3);
+}

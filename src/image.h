@@ -35,15 +35,11 @@ typedef struct Image {
 
 void createImage(Image* image, int width, int height);
 void clearImage(Image* image, int red, int green, int blue);
-void setCurrentColor(Image* image, int red, int green, int blue);
 void drawLine(Image* image, int x1, int y1, int x2, int y2);
 void drawCircle(Image* image, int xC, int yC, int radius);
 void displayCircle(Image* image, int xC, int yC, int x, int y);
 void drawPolygon(Image* image, int polygonQntPoints, int** polygonPoints);
 void drawRectangle(Image* image, int x1, int y1, int x2, int y2);
-void fillPolygon(Image* image, int x, int y);
-void floodFill(Image* image, int x, int y, char targetColor[], char replacementColor[]);
-bool_trespass isColorDiffFromPixel(Image* image, int rgb[], int x, int y);
 void putPixel(Image* image, int x, int y);
 
 #endif
