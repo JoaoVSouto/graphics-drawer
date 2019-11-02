@@ -21,12 +21,20 @@ char* readFile(char* fileName) {
     fseek(file, 0, SEEK_SET);
 
     // Aloca espaço de memória suficiente para formar a string
-    fileContent = malloc(fileSize + 1);  // fileSize + 1 por causa do \0
+    fileContent = malloc(fileSize + 2);  // fileSize + 2 por causa do \0 e do \n
     // Lê o arquivo passando como argumentos:
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
-    fileContent[fileSize] = '\0';
-    printf("\e[40;38;5;82mSUCESSO: Leitura do \e[30;48;5;82m %s \e[0m \e[40;38;5;82mrealizada!\n", fileName);
+
+    // Caso o último caractere do arquivo não seja um \n, adiciona o \n
+    if (fileContent[fileSize - 1] != '\n') {
+      fileContent[fileSize] = '\n';
+      fileContent[fileSize + 1] = '\0';
+    } else {
+      fileContent[fileSize] = '\0';
+    }
+
+    printf("\e[40;38;5;82mSUCESSO: Leitura do \e[30;48;5;82m %s \e[0m \e[40;38;5;82mrealizada!\e[0m\n", fileName);
 
     fclose(file);
   }
@@ -68,7 +76,7 @@ void saveFile(char* fileName, char* fileContent) {
     printf("\e[38;5;196mERRO: Não foi possível abrir %s\n", fileName);
   } else {
     if (fputs(fileContent, file) != EOF) {
-      printf("SUCESSO: \e[30;48;5;82m %s \e[0m \e[40;38;5;82msalvo!\n", fileName);
+      printf("\e[40;38;5;82mSUCESSO: \e[30;48;5;82m %s \e[0m \e[40;38;5;82msalvo!\n", fileName);
     }
 
     fclose(file);
@@ -87,6 +95,7 @@ void compressImage(char* image) {
   // 1500(255 255 255)
   // 4 algarismos de repetição + 2 parenteses + 12 caracteres de cor
   char compressedLine[MAX_CHARS_PER_LINE + 2 + 4];
+  double reduction;
 
   imageCompressed = (char*)calloc(strlen(image), sizeof(char));
   imageString = (char*)calloc(strlen(image), sizeof(char));
@@ -130,6 +139,17 @@ void compressImage(char* image) {
   removeLastChar(previousLine);
   sprintf(compressedLine, "%d(%s)\n", counter, previousLine);
   strcat(imageCompressed, compressedLine);
+
+  reduction = 100 - ((double)strlen(imageCompressed) * 100 / strlen(image));
+
+  printf("\e[43m\e[30m-----TAMANHO REDUZIDO------\e[0m\n");
+  printf("\e[41m\e[30mDE: %-13s ↑ %4.1f MB\e[0m\n", "", bytesToMegaBytes(strlen(image)));
+  if (bytesToKiloBytes(strlen(imageCompressed)) < 1) {
+    printf("\e[44mPARA: %-10s ↓ %ld bytes\e[0m\n", "", strlen(imageCompressed));
+  } else {
+    printf("\e[44mPARA: %-9s ↓ %6.1f kB\e[0m\n", "", bytesToKiloBytes(strlen(imageCompressed)));
+  }
+  printf("\e[46m\e[30mREDUÇÃO TOTAL DE: %-1s %6.2lf%%\e[0m\n", "", reduction);
 
   strcpy(image, imageCompressed);
 
@@ -205,7 +225,7 @@ void decompressImage(char* fileName, char* imageContent) {
     token = strtok(NULL, newLine);
   }
 
-  printf("SUCESSO: Descompressão realizada!\n");
+  printf("\e[40;38;5;82mSUCESSO: Descompressão realizada!\n");
 
   saveFile(fileName, imageDecompressed);
 
