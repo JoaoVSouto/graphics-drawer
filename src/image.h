@@ -26,9 +26,11 @@ typedef enum primitives {
 typedef struct Image {
   char* image;
   char*** matrix;
-  int columns;
-  int rows;
-  int currentColor[3];
+  int columns,
+      rows,
+      currentColor[3];
+  long size,
+      charsWritten;
 } Image;
 
 void createImage(Image* image, int width, int height);

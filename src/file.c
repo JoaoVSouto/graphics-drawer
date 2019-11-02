@@ -21,7 +21,7 @@ char* readFile(char* fileName) {
     fseek(file, 0, SEEK_SET);
 
     // Aloca espaço de memória suficiente para formar a string
-    fileContent = malloc(fileSize + 1);  // fileSize + 1 porque com fileSize + 0 gera segmentation fault
+    fileContent = malloc(fileSize + 1);  // fileSize + 1 por causa do \0
     // Lê o arquivo passando como argumentos:
     // (string, tam em bytes de cada elemento, número de elementos a serem lidos, arquivo)
     fread(fileContent, 1, fileSize, file);
@@ -43,11 +43,12 @@ void saveImage(Image* image, char* bruteImageName) {
   strcpy(imageName, bruteImageName);
   imageName[strlen(imageName) - 1] = '\0';
 
-  // TODO: descobrir forma mais eficiente de concatenar string
-  // Escreve a matriz na imagem
   for (i = 0; i < image->rows; i++) {
     for (j = 0; j < image->columns; j++) {
-      strcat(image->image, image->matrix[i][j]);
+      snprintf(image->image + image->charsWritten,
+               image->size - image->charsWritten,
+               "%s", image->matrix[i][j]);
+      image->charsWritten += strlen(image->matrix[i][j]);
     }
   }
 
@@ -147,6 +148,7 @@ void decompressImage(char* fileName, char* imageContent) {
       lineNumber = 1,
       numberOfRepetitions,
       i;
+  long charsWritten = 0, imageSize;
 
   // Detectando se a imagem já está descomprimida
   decompressionMarker = strchr(imageContent, '#');
@@ -171,7 +173,8 @@ void decompressImage(char* fileName, char* imageContent) {
 
     token = strtok(NULL, newLine);
   }
-  imageDecompressed = (char*)malloc(numberOfLines * MAX_CHARS_PER_LINE);
+  imageSize = numberOfLines * MAX_CHARS_PER_LINE + 1;
+  imageDecompressed = (char*)malloc(imageSize);
 
   lineNumber = 1;
   token = strtok(imageContent, newLine);
@@ -183,7 +186,9 @@ void decompressImage(char* fileName, char* imageContent) {
         removeLastChar(token);
       }
       sprintf(currentLine, "%s\n", token);
-      strcat(imageDecompressed, currentLine);
+      snprintf(imageDecompressed + charsWritten,
+               imageSize - charsWritten, "%s", currentLine);
+      charsWritten += strlen(currentLine);
       lineNumber++;
     } else {
       sscanf(token, "%d(%d %d %d)", &numberOfRepetitions,
@@ -192,7 +197,9 @@ void decompressImage(char* fileName, char* imageContent) {
               pixelColor[1], pixelColor[2]);
 
       for (i = 0; i < numberOfRepetitions; i++) {
-        strcat(imageDecompressed, currentLine);
+        snprintf(imageDecompressed + charsWritten,
+                 imageSize - charsWritten, "%s", currentLine);
+        charsWritten += strlen(currentLine);
       }
     }
     token = strtok(NULL, newLine);

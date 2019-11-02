@@ -175,20 +175,19 @@ int main(int argc, char* argv[]) {
       token = strtok(NULL, blankSpace);
     }
   }
-
-  for (i = 0; i < polygonQntPoints; i++) {
-    free(polygonPoints[i]);
-  }
   if (polygonPoints != NULL) {
+    for (i = 0; i < polygonQntPoints; i++) {
+      free(polygonPoints[i]);
+    }
     free(polygonPoints);
   }
-  for (i = 0; i < image.rows; i++) {
-    for (j = 0; j < image.columns; j++) {
-      free(image.matrix[i][j]);
-    }
-    free(image.matrix[i]);
-  }
   if (image.matrix != NULL) {
+    for (i = 0; i < image.rows; i++) {
+      for (j = 0; j < image.columns; j++) {
+        free(image.matrix[i][j]);
+      }
+      free(image.matrix[i]);
+    }
     free(image.matrix);
   }
   if (image.image != NULL) {

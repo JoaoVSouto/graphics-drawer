@@ -2,8 +2,10 @@
 
 void createImage(Image* image, int width, int height) {
   // No pior caso, por cada linha na imagem terá no máximo 12 caracteres
-  int imageSize = width * height * MAX_CHARS_PER_LINE + HEADER_SIZE;
+  long imageSize = width * height * MAX_CHARS_PER_LINE + HEADER_SIZE;
   int i, j;
+
+  image->size = imageSize;
 
   // Alocando a matriz
   image->matrix = (char***)calloc(height, sizeof(char**));
@@ -19,7 +21,7 @@ void createImage(Image* image, int width, int height) {
 
   image->image = (char*)calloc(imageSize, sizeof(char));
 
-  sprintf(image->image, "P3\n%d %d\n255\n", width, height);
+  image->charsWritten = sprintf(image->image, "P3\n%d %d\n255\n", width, height);
 }
 
 void clearImage(Image* image, int red, int green, int blue) {
