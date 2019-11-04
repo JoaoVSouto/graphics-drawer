@@ -183,28 +183,28 @@ void displayCircle(Image* image, int xC, int yC, int x, int y) {
   // Condicionais são realizadas para que caso o círculo seja desenhado
   // no extremo da imagem, seja impedido de gerar segmentation fault
   if (xC + x >= 0 && xC + x < image->columns && yC + y >= 0 && yC + y < image->rows) {
-    putPixel(image, xC + x, yC + y);  // Octante 1
+    putPixel(image, xC + x, yC + y);  // Octante 7
   }
   if (xC - x >= 0 && xC - x < image->columns && yC + y >= 0 && yC + y < image->rows) {
-    putPixel(image, xC - x, yC + y);  // Octante 4
+    putPixel(image, xC - x, yC + y);  // Octante 6
   }
   if (xC + x >= 0 && xC + x < image->columns && yC - y >= 0 && yC - y < image->rows) {
-    putPixel(image, xC + x, yC - y);  // Octante 8
+    putPixel(image, xC + x, yC - y);  // Octante 2
   }
   if (xC - x >= 0 && xC - x < image->columns && yC - y >= 0 && yC - y < image->rows) {
-    putPixel(image, xC - x, yC - y);  // Octante 5
+    putPixel(image, xC - x, yC - y);  // Octante 3
   }
   if (xC + y >= 0 && xC + y < image->columns && yC + x >= 0 && yC + x < image->rows) {
-    putPixel(image, xC + y, yC + x);  // Octante 2
+    putPixel(image, xC + y, yC + x);  // Octante 8
   }
   if (xC - y >= 0 && xC - y < image->columns && yC + x >= 0 && yC + x < image->rows) {
-    putPixel(image, xC - y, yC + x);  // Octante 3
+    putPixel(image, xC - y, yC + x);  // Octante 5
   }
   if (xC + y >= 0 && xC + y < image->columns && yC - x >= 0 && yC - x < image->rows) {
-    putPixel(image, xC + y, yC - x);  // Octante 7
+    putPixel(image, xC + y, yC - x);  // Octante 1
   }
   if (xC - y >= 0 && xC - y < image->columns && yC - x >= 0 && yC - x < image->rows) {
-    putPixel(image, xC - y, yC - x);  // Octante 6
+    putPixel(image, xC - y, yC - x);  // Octante 4
   }
 }
 
