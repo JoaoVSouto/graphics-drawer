@@ -1,4 +1,4 @@
-image 600 800
+image 1920 1080
 clear 255 0 255
 color 0 0 0
 circle 800 500 100
