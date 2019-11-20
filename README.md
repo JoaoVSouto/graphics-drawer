@@ -18,7 +18,8 @@ Esse projeto tem como princípio a interpretação e escrita de primitivas gráf
 
 ## O que seria feito diferente?
 
-FINISH THIS LATER...
+- Checagem do tamanho do arquivo pré e pós compressão para checar se realmente valeria a pena a compressão da imagem.
+- Algoritmo mais eficiente de fill para que não gerasse segmentation fault em áreas muito grandes.
 
 ## Como compilar o projeto?
 

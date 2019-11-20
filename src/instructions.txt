@@ -1,4 +1,4 @@
-image 600 800
+image 1920 1080
 clear 255 0 255
 color 0 0 0
 circle 800 500 100
@@ -6,8 +6,8 @@ fill 710 490
 line 600 700 1000 700
 line 1000 700 1000 900
 color 0 255 0
-polygon 3 600 950 650 900 700 900
-fill 675 875
+polygon 3 600 950 650 900 700 1000
+fill 650 950
 line 650 900 700 850
 line 700 900 750 950
 save vaidarcerto.ppm
